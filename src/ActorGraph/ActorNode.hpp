@@ -11,6 +11,10 @@
 #include <queue>
 #include <vector>
 
+#include "ActorNode.hpp"
+#include "MovieNode.hpp"
+#include "EdgeNode.hpp"
+
 using namespace std;
 
 class actorNode {
@@ -22,10 +26,9 @@ class actorNode {
 		actorNode* prevActor; // previous actor in the shortest path
 		movieNode* prevMovie; //previous movie in shortest pth;
 		
-		unordered_map<string, edge*> adj;
-		vector<edgeNode*> connections;
+		vector<edgeNode> connections;
 
-		explicit actorNode(string& actorName);
+		actorNode(string& actorName);
 
 		//comparator for PQ in BFS()
 		struct compareDistance {

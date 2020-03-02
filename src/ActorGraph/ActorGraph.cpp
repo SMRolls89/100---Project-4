@@ -50,17 +50,17 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
         // extract the information
         string actor(record[0]);
         string title(record[1]);
-        int year = stoi(record[2]);
+        short year = stoi(record[2]);
 
         // TODO: we have an actor/movie relationship to build the graph
 	// Create new actorNode if not iterated yet
 	if (actors.find(actor) == actors.end()) {
-		actorNode* newActor = new actorNode(actor_name);
+		auto newActor = new actorNode(actor);
 		actors.insert({actor, newActor});
 	}
 
 	//create movieNode if not iterated yet
-	string movieHash = movie + year;
+	string movieHash = title + to_string(year);
 	if (movies.find(movieHash) == movies.end()) {
 		movieNode* newMovie = new movieNode(title, year);
 		movies.insert({movieHash, newMovie});
@@ -69,14 +69,14 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
 	//create edge connections
 	actorNode* curr = actors[actor];
 	movieNode* newMovie = movies[movieHash];
-	vector<actorNode*>* costars = movies[movieHash]->allActors;
+	vector<actorNode*>& costars = movies[movieHash]->cast;
 	for (actorNode* costar : costars) {
 		edgeNode newEdge = edgeNode(newMovie, curr, costar);
 		edges.push_back(newEdge);
-		star->connections.push_back(newEdge);
+		costar->connections.push_back(newEdge);
 		actors[actor]->connections.push_back(newEdge);
 	}
-	stars.push_back(curr);
+	costars.push_back(curr);
     }
 
     // if failed to read the file, clear the graph and return
@@ -84,37 +84,25 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
         cerr << "Failed to read " << filename << endl;
         return false;
     }
+    cout << "done" << endl;
     infile.close();
-
     return true;
 }
 
 /* TODO */
-void ActorGraph::BFS(const string& fromActor, const string& toActor,
-                     string& shortestPath) {
+void ActorGraph::BFS(actorNode* fromActor, actorNode* toActor, string& shortestPath) {
 	priority_queue<actorNode*, vector<actorNode*>, actorNode::compareDistance> pq;
 	bool isFound = false;
 
-	actorNode* actor1 = actorGraph->actors[fromActor];
-	actorNode* actor2 = actorGraph->actors[toActor];
-
-	for (auto& actor: actorGraph->actors) {
-		if (actor.second != nullptr){
-			actor.second->distance = INT_MAX;
-			actor.second->isDone = false;
-		}
-
-	}
-
-	actor1->distance = 0;
-	pq.push(actor1);
-	actorNode* costar;
+	fromActor->distance = 0;
+	pq.push(fromActor);
+	actorNode* coStar;
 
 	while(!pq.empty()) {
 		actorNode* curr = pq.top();
 		pq.pop();
 
-		if (curr == actor2) {
+		if (curr == toActor) {
 			isFound == true;
 			break;
 		}
@@ -125,17 +113,17 @@ void ActorGraph::BFS(const string& fromActor, const string& toActor,
 				unsigned int dist = curr->distance + 1;
 
 				//find other costar
-				if (edge->actor1 == curr) {
-					coStar = edge->actor2;
+				if (edge.actor1 == curr) {
+					coStar = edge.actor2;
 				}
 				else {
-					coStar = edge->actor1;
+					coStar = edge.actor1;
 				}
 
 				if (dist < coStar->distance) {
 					coStar->distance = dist;
 					coStar->prevActor = curr;
-					coStar->prevMovie = edge->movie;
+					coStar->prevMovie = edge.movie;
 					pq.push(coStar);
 				
 				}
@@ -148,18 +136,18 @@ void ActorGraph::BFS(const string& fromActor, const string& toActor,
 		shortestPath = "";
 	}
 	else {
-		actorNode* curr = actor2;
+		actorNode* curr = toActor;
 		//save the string in a vector first
 		vector<string> path;
-		while (curr != actor1) {
+		while (curr != fromActor) {
 			path.push_back("]-->(" + curr->actorName + ")");
 			path.push_back("#@" + to_string(curr->prevMovie->year));
 			path.push_back("--[" + curr->prevMovie->movieName);
 			curr = curr->prevActor;
 		}
-		path.puish_back("(" + actor1 + ")");
+		path.push_back("(" + fromActor->actorName + ")");
 		for(auto it = path.rbegin(); it != path.rend(); it++) {
-			shortestPath =+ *it;
+			shortestPath.append(*it);
 		}
 
 	}

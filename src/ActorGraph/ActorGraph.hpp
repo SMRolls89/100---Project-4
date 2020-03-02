@@ -14,8 +14,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "actorNode.hpp"
-#include "movieNode.hpp"
+#include "ActorNode.hpp"
+#include "MovieNode.hpp"
 
 using namespace std;
 
@@ -25,11 +25,11 @@ using namespace std;
 class ActorGraph {
   protected:
     // data structures used in actor graph
+
+  public:
     unordered_map<string, actorNode*> actors; //will contain unique actors
     unordered_map<string, movieNode*> movies; //will contain unique movies
     vector<edgeNode> edges; //connections between actors
-
-  public:
     /* Constructor of the Actor Graph */
     ActorGraph();
 
@@ -38,7 +38,7 @@ class ActorGraph {
     bool buildGraphFromFile(const char* filename);
 
     /* TODO */
-    void BFS(const string& fromActor, const string& toActor,
+    void BFS(actorNode* fromActor, actorNode* toActor,
              string& shortestPath);
 
     /* TODO */
