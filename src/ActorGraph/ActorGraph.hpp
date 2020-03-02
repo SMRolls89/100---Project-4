@@ -7,6 +7,15 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+
+#include "actorNode.hpp"
+#include "movieNode.hpp"
 
 using namespace std;
 
@@ -15,13 +24,17 @@ using namespace std;
  */
 class ActorGraph {
   protected:
-    // TODO: add data structures used in actor graph
+    // data structures used in actor graph
+    unordered_map<string, actorNode*> actors; //will contain unique actors
+    unordered_map<string, movieNode*> movies; //will contain unique movies
+    vector<edgeNode> edges; //connections between actors
 
   public:
-    /* TODO */
+    /* Constructor of the Actor Graph */
     ActorGraph();
 
-    /* TODO */
+    /* build a graph from a tab-delimited file
+     * return true if built successfully, false otherwise */
     bool buildGraphFromFile(const char* filename);
 
     /* TODO */
@@ -32,7 +45,7 @@ class ActorGraph {
     void predictLink(const string& queryActor, vector<string>& predictionNames,
                      unsigned int numPrediction);
 
-    /* TODO */
+    /* Destructor */
     ~ActorGraph();
 };
 

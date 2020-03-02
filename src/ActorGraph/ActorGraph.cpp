@@ -53,6 +53,30 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
         int year = stoi(record[2]);
 
         // TODO: we have an actor/movie relationship to build the graph
+	// Create new actorNode if not iterated yet
+	if (actors.find(actor) == actors.end()) {
+		actorNode* newActor = new actorNode(actor_name);
+		actors.insert({actor, newActor});
+	}
+
+	//create movieNode if not iterated yet
+	string movieHash = movie + year;
+	if (movies.find(movieHash) == movies.end()) {
+		movieNode* newMovie = new movieNode(title, year);
+		movies.insert({movieHash, newMovie});
+	}
+
+	//create edge connections
+	actorNode* curr = actors[actor];
+	movieNode* newMovie = movies[movieHash];
+	vector<actorNode*>* costars = movies[movieHash]->allActors;
+	for (actorNode* costar : costars) {
+		edgeNode newEdge = edgeNode(newMovie, curr, costar);
+		edges.push_back(newEdge);
+		star->connections.push_back(newEdge);
+		actors[actor]->connections.push_back(newEdge);
+	}
+	stars.push_back(curr);
     }
 
     // if failed to read the file, clear the graph and return
@@ -75,4 +99,11 @@ void ActorGraph::predictLink(const string& queryActor,
                              unsigned int numPrediction) {}
 
 /* TODO */
-ActorGraph::~ActorGraph() {}
+ActorGraph::~ActorGraph() {
+	for(auto& movie: movies) {
+		delete movie.second;
+	}
+	for(auto& actor: actors){
+		delete actor.second;
+	}
+}
