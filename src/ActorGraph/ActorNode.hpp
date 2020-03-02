@@ -27,7 +27,7 @@ class actorNode {
 
 		explicit actorNode(string& actorName);
 
-		//comparator for PQ in pathfinder
+		//comparator for PQ in BFS()
 		struct compareDistance {
 			bool operator() (actorNode*& n1, actorNode*& n2) {
 				if (n1->distance == n2->distance) {

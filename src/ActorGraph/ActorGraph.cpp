@@ -91,7 +91,81 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
 
 /* TODO */
 void ActorGraph::BFS(const string& fromActor, const string& toActor,
-                     string& shortestPath) {}
+                     string& shortestPath) {
+	priority_queue<actorNode*, vector<actorNode*>, actorNode::compareDistance> pq;
+	bool isFound = false;
+
+	actorNode* actor1 = actorGraph->actors[fromActor];
+	actorNode* actor2 = actorGraph->actors[toActor];
+
+	for (auto& actor: actorGraph->actors) {
+		if (actor.second != nullptr){
+			actor.second->distance = INT_MAX;
+			actor.second->isDone = false;
+		}
+
+	}
+
+	actor1->distance = 0;
+	pq.push(actor1);
+	actorNode* costar;
+
+	while(!pq.empty()) {
+		actorNode* curr = pq.top();
+		pq.pop();
+
+		if (curr == actor2) {
+			isFound == true;
+			break;
+		}
+		else if(!curr->isDone) {
+			curr->isDone = true;
+
+			for (edgeNode edge : curr->connections){
+				unsigned int dist = curr->distance + 1;
+
+				//find other costar
+				if (edge->actor1 == curr) {
+					coStar = edge->actor2;
+				}
+				else {
+					coStar = edge->actor1;
+				}
+
+				if (dist < coStar->distance) {
+					coStar->distance = dist;
+					coStar->prevActor = curr;
+					coStar->prevMovie = edge->movie;
+					pq.push(coStar);
+				
+				}
+			}
+		}
+
+	}
+	//update shortestPath
+	if (!isFound) {
+		shortestPath = "";
+	}
+	else {
+		actorNode* curr = actor2;
+		//save the string in a vector first
+		vector<string> path;
+		while (curr != actor1) {
+			path.push_back("]-->(" + curr->actorName + ")");
+			path.push_back("#@" + to_string(curr->prevMovie->year));
+			path.push_back("--[" + curr->prevMovie->movieName);
+			curr = curr->prevActor;
+		}
+		path.puish_back("(" + actor1 + ")");
+		for(auto it = path.rbegin(); it != path.rend(); it++) {
+			shortestPath =+ *it;
+		}
+
+	}
+
+
+}
 
 /* TODO */
 void ActorGraph::predictLink(const string& queryActor,
