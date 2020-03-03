@@ -73,19 +73,15 @@ int main(int argc, char* argv[]) {
         string actor1(actorPair[0]);
         string actor2(actorPair[1]);
 
-	actorNode* actorOne = graph->actors[actor1];
-	actorNode* actorTwo = graph->actors[actor2];
-
-	for (auto& actor: graph->actors){
-		if (actor.second != nullptr) {
-			actor.second->distance = INT8_MAX;
-			actor.second->isDone = false;
-		}
-	}
-
         // output the shorest path for each line
         string shortestPath = "";
-        graph->BFS(actorOne, actorTwo, shortestPath);
+        vector<string> path;
+
+	path = graph->BFS(actor1, actor2, shortestPath, graph);
+
+	for(auto it = path.rbegin(); it != path.rend(); it++){
+		shortestPath.append(*it);
+	}
         if (shortestPath.length() > 0) {
             outfile << shortestPath;
         }

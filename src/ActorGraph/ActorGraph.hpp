@@ -38,8 +38,8 @@ class ActorGraph {
     bool buildGraphFromFile(const char* filename);
 
     /* TODO */
-    void BFS(actorNode* fromActor, actorNode* toActor,
-             string& shortestPath);
+    vector<string> BFS(string& fromActor, string& toActor,
+             string& shortestPath, ActorGraph* graph);
 
     /* TODO */
     void predictLink(const string& queryActor, vector<string>& predictionNames,

@@ -10,4 +10,3 @@
 actorNode::actorNode(string& actorName): actorName(actorName), prevActor(nullptr), prevMovie(nullptr){}
 
 //destructor
-~actorNode::~actorNode() {}

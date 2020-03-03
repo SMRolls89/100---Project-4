@@ -23,7 +23,7 @@ class edgeNode{
 		actorNode* actor2;
 		movieNode* movie;
 
-		explicit edgeNode(movieNode* movie, actorNode* actor1, actorNode* actor2);
+		edgeNode(movieNode* movie, actorNode* actor1, actorNode* actor2);
 };
 
 #endif

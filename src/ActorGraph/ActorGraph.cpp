@@ -2,6 +2,9 @@
  * TODO: add file header
  */
 
+#include "EdgeNode.cpp"
+#include "ActorNode.cpp"
+#include "MovieNode.cpp"
 #include "ActorGraph.hpp"
 #include <fstream>
 #include <iostream>
@@ -53,13 +56,13 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
         short year = stoi(record[2]);
 
         // TODO: we have an actor/movie relationship to build the graph
-	// Create new actorNode if not iterated yet
+	// Create new actorNode if actor is not in hash table yet
 	if (actors.find(actor) == actors.end()) {
-		auto newActor = new actorNode(actor);
+		actorNode* newActor = new actorNode(actor);
 		actors.insert({actor, newActor});
 	}
 
-	//create movieNode if not iterated yet
+	//create movieNode if not in hash table yet
 	string movieHash = title + to_string(year);
 	if (movies.find(movieHash) == movies.end()) {
 		movieNode* newMovie = new movieNode(title, year);
@@ -68,10 +71,10 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
 
 	//create edge connections
 	actorNode* curr = actors[actor];
-	movieNode* newMovie = movies[movieHash];
+	movieNode* currMovie = movies[movieHash];
 	vector<actorNode*>& costars = movies[movieHash]->cast;
 	for (actorNode* costar : costars) {
-		edgeNode newEdge = edgeNode(newMovie, curr, costar);
+		edgeNode newEdge = edgeNode(currMovie, curr, costar);
 		edges.push_back(newEdge);
 		costar->connections.push_back(newEdge);
 		actors[actor]->connections.push_back(newEdge);
@@ -84,33 +87,46 @@ bool ActorGraph::buildGraphFromFile(const char* filename) {
         cerr << "Failed to read " << filename << endl;
         return false;
     }
-    cout << "done" << endl;
     infile.close();
     return true;
 }
 
 /* TODO */
-void ActorGraph::BFS(actorNode* fromActor, actorNode* toActor, string& shortestPath) {
+vector<string> ActorGraph::BFS(string& fromActor, string& toActor, string& shortestPath, ActorGraph* graph) {
 	priority_queue<actorNode*, vector<actorNode*>, actorNode::compareDistance> pq;
 	bool isFound = false;
 
-	fromActor->distance = 0;
-	pq.push(fromActor);
+	actorNode* actor1 = graph->actors[fromActor];
+	actorNode* actor2 = graph->actors[toActor];
+
+	for (auto& actor : graph->actors) {
+		//set all actors in hashtable to have max distance and bool false
+		if (actor.second != nullptr){
+			actor.second->distance == UINT8_MAX;
+			actor.second->isDone == false;
+		}
+	}
+
+	actor1->distance = 0;
+	pq.push(actor1);
 	actorNode* coStar;
 
 	while(!pq.empty()) {
 		actorNode* curr = pq.top();
 		pq.pop();
-
-		if (curr == toActor) {
-			isFound == true;
+		
+		//check to make sure toActor is not == to fromActor, which in that case, path is found
+		if (curr == actor2) {
+			isFound = true;
 			break;
 		}
+		//now check is fromActor has found shortest path or not (bool factor)
 		else if(!curr->isDone) {
 			curr->isDone = true;
-
+			
+			//go through all connections (edges) of fromActor
 			for (edgeNode edge : curr->connections){
-				unsigned int dist = curr->distance + 1;
+				unsigned int dist = curr->distance + 1; //+1???
 
 				//find other costar
 				if (edge.actor1 == curr) {
@@ -132,26 +148,24 @@ void ActorGraph::BFS(actorNode* fromActor, actorNode* toActor, string& shortestP
 
 	}
 	//update shortestPath
+	vector<string> path;
 	if (!isFound) {
 		shortestPath = "";
 	}
 	else {
-		actorNode* curr = toActor;
+		actorNode* curr = actor2;
 		//save the string in a vector first
-		vector<string> path;
-		while (curr != fromActor) {
+		//vector<string> path;
+		while (curr != actor1) {
 			path.push_back("]-->(" + curr->actorName + ")");
 			path.push_back("#@" + to_string(curr->prevMovie->year));
 			path.push_back("--[" + curr->prevMovie->movieName);
 			curr = curr->prevActor;
 		}
-		path.push_back("(" + fromActor->actorName + ")");
-		for(auto it = path.rbegin(); it != path.rend(); it++) {
-			shortestPath.append(*it);
-		}
+		path.push_back("(" + actor1->actorName + ")");
 
 	}
-
+	return path;
 
 }
 

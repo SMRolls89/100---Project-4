@@ -48,7 +48,6 @@ class actorNode {
 			adj[actor->actorName] = new edge(actor, info.first, info.second);
 		}*/
 
-		~actorNode() {};
 		
 };
 
