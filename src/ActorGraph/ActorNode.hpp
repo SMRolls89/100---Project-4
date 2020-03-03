@@ -1,34 +1,34 @@
 /*
- *
- *
- *
+ *Steffe Reyes
+ *Ji Hyun An
+ *File: ActorNode.hpp
  */
 
 #ifndef ACTORNODE_HPP
 #define ACTORNODE_HPP
 
 #include <string>
-#include <queue>
 #include <vector>
 
-#include "ActorNode.hpp"
 #include "MovieNode.hpp"
 #include "EdgeNode.hpp"
 
 using namespace std;
 
+//This header file created a node for each unique actor in a graph
 class actorNode {
 
 	public:
-		string actorName;
-		unsigned int distance; //distance from the query node
+		string actorName; //name of actor
+		unsigned int distance; //distance from the query node; used in BFS
 		bool isDone; // set true if node was visited in BFS during shortest path
-		actorNode* prevActor; // previous actor in the shortest path
-		movieNode* prevMovie; //previous movie in shortest pth;
+		actorNode* prevActor; // previous actor  used in BFS 
+		movieNode* prevMovie; //previous movie used in BFS;
 		
-		vector<edgeNode> connections;
+		vector<edgeNode> connections; //contains all EdgeNodes which are connections between this actor and another actor thats shares a movie
 
-		actorNode(string& actorName);
+		//default contructor
+		actorNode(string& actorName): actorName(actorName), prevActor(nullptr), prevMovie(nullptr) {}
 
 		//comparator for PQ in BFS()
 		struct compareDistance {
@@ -41,14 +41,6 @@ class actorNode {
 			}
 		}; 
 
-
-		/*
-		void add (actorNode* actor, const pair<string, int>& info) {
-			if (!adj.count(actor->actorName))
-			adj[actor->actorName] = new edge(actor, info.first, info.second);
-		}*/
-
-		
 };
 
 

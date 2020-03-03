@@ -1,8 +1,8 @@
 /*
  *
- *
- *
- *
+ *Steffe Reyes
+ *Ji Hyun An
+ *File EdgeNode.hpp
  *
  */
 
@@ -16,14 +16,15 @@ using namespace std;
 
 class actorNode;
 
-//define an edge characterized by actors ahving a common movie
+//define an edge characterized by actors having a common movie
 class edgeNode{
 	public:
 		actorNode* actor1;
 		actorNode* actor2;
 		movieNode* movie;
 
-		edgeNode(movieNode* movie, actorNode* actor1, actorNode* actor2);
+		//constructor
+		edgeNode(movieNode* movie, actorNode* actor1, actorNode* actor2): movie(movie), actor1(actor1), actor2(actor2) {}
 };
 
 #endif

@@ -72,16 +72,30 @@ int main(int argc, char* argv[]) {
 
         string actor1(actorPair[0]);
         string actor2(actorPair[1]);
+	
+	//couts for tetsting
+	//cout << actor1 <<endl;
+	//cout << actor2 <<endl; //
 
         // output the shorest path for each line
         string shortestPath = "";
         vector<string> path;
+	
+	//for testing
+	//cout<< "entering BFS" <<endl; //
 
+	//passing actor1, actor2, shortestPath, and the already built ActorGraph
+	//BFS will return a vector of strings (path) that contain the shortest path from actor1 to actor2
 	path = graph->BFS(actor1, actor2, shortestPath, graph);
 
+	//iterating in reverse to print the shortestPAth correctly
 	for(auto it = path.rbegin(); it != path.rend(); it++){
 		shortestPath.append(*it);
 	}
+
+	//testing
+	//cout << shortestPath <<endl;//
+
         if (shortestPath.length() > 0) {
             outfile << shortestPath;
         }

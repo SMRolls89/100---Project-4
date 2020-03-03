@@ -1,0 +1,9 @@
+(actor)--[movie#@year]-->(actor)--...
+(actor five)--[movie 1#@2000]-->(actor one)
+
+(actor one)--[movie 2#@2001]-->(actor two)--[movie 4#@2003]-->(actor three)
+
+(actor one)--[movie 2#@2001]-->(actor two)--[movie 4#@2003]-->(actor four)
+
+(actor two)--[movie 4#@2003]-->(actor four)
+

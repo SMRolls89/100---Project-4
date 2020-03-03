@@ -1,0 +1,8 @@
+(actor)--[movie#@year]-->(actor)--...
+(Nicole Kidman)--[Untitled Roger Ailes Project#@2019]-->(Alice Eve)--[Replicas#@2018]-->(Keanu Reeves)
+(Tim Roth)--[Emmett's Mark#@2002]-->(Gabriel Byrne)--[Played#@2006]-->(Vinnie Jones)
+(Will Smith)--[Concussion#@2015]-->(Alec Baldwin)--[Mercury Rising#@1998]-->(Bruce Willis)
+(Kyra Sedgwick)--[Big Sky#@2015]-->(Frank Grillo)
+(Christopher Walken)--[Blast from the Past#@1999]-->(Brendan Fraser)--[The Poison Rose#@2019]-->(Morgan Freeman)
+(Courteney Cox)--[Scream 3#@2000]-->(Neve Campbell)--[Intimate Affairs#@2001]-->(Dermot Mulroney)--[I Still See You#@2018]-->(Richard Harmon)
+(Cameron Diaz)--[Gambit#@2012]-->(Alan Rickman)--[Die Hard#@1988]-->(Bruce Willis)--[In Country#@1989]-->(Emily Lloyd)

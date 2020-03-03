@@ -1,7 +1,8 @@
 
 /*
- *
- *
+ *Steffe Reyes
+ *Ji Hyun An
+ *File: ActorNode.hpp
  */
 
 #ifndef MOVIENODE_HPP
@@ -14,7 +15,7 @@ using namespace std;
 
 class actorNode;
 
-//create a movie class defined by nits title, year, and cast
+//create a movie class defined by its title, year, and all cast included in the movie
 class movieNode {
 	public:
 
@@ -22,7 +23,8 @@ class movieNode {
 		int year;
 		vector<actorNode*> cast;
 
-		movieNode(string& movieName, unsigned short year);
+		//constructor
+		movieNode(string& movieName, unsigned short year) : movieName(movieName), year(year){}
 
 };
 

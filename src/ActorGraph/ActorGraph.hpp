@@ -1,5 +1,7 @@
 /**
- * TODO: add file header
+ * Steffe Reyes
+ * Ji Hyun An
+ * File: ActorGraph.cpp
  */
 
 #ifndef ACTORGRAPH_HPP
@@ -13,23 +15,28 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <queue>
 
 #include "ActorNode.hpp"
 #include "MovieNode.hpp"
+#include "EdgeNode.hpp"
 
 using namespace std;
 
 /**
- * TODO: add class header
+ * ActorGraph is the implementation of the graph containing all actors/movies/edges between actors
  */
 class ActorGraph {
   protected:
     // data structures used in actor graph
 
   public:
-    unordered_map<string, actorNode*> actors; //will contain unique actors
-    unordered_map<string, movieNode*> movies; //will contain unique movies
-    vector<edgeNode> edges; //connections between actors
+    // using a hashtable to store all unique actors
+    unordered_map<string, actorNode*> actors; 
+    //using a hashtable to store all unique movies
+    unordered_map<string, movieNode*> movies; 
+    //a vector of edgeNodes containing all possible edge between one actor and another
+    vector<edgeNode> edges; 
     /* Constructor of the Actor Graph */
     ActorGraph();
 
@@ -37,9 +44,10 @@ class ActorGraph {
      * return true if built successfully, false otherwise */
     bool buildGraphFromFile(const char* filename);
 
-    /* TODO */
+    /* Breadth First Search function
+     * given 2 actors and graph, return a vector of strings that contain the shortest path between the 2 actors*/
     vector<string> BFS(string& fromActor, string& toActor,
-             string& shortestPath, ActorGraph* graph);
+             string& shortestPath, ActorGraph  *graph);
 
     /* TODO */
     void predictLink(const string& queryActor, vector<string>& predictionNames,
