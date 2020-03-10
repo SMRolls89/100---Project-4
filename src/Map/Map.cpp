@@ -101,7 +101,9 @@ void Map::Dijkstra(const string& from, const string& to,
 }
 
 /* TODO */
-void Map::findMST(vector<Edge*>& MST) {}
+void Map::findMST(vector<Edge*>& MST) {
+	
+}
 
 /* TODO */
 void Map::crucialRoads(vector<Edge*>& roads) {}
