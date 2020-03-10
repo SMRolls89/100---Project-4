@@ -10,6 +10,8 @@ using namespace std;
 
 class Vertex;
 
+typedef unordered_map<Vertex*, float> distMap;
+
 /* This class defines a directed edge from source vertex to target vertex in the
  * map graph */
 class Edge {
