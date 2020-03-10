@@ -90,7 +90,10 @@ bool Map::addEdge(const string& name1, const string& name2) {
 
 /* TODO */
 void Map::Dijkstra(const string& from, const string& to,
-                   vector<Vertex*>& shortestPath) {}
+                   vector<Vertex*>& shortestPath) {
+	//create an empty queue to store the vertices and distance 
+	//everything is infinity except the source 
+}
 
 /* TODO */
 void Map::findMST(vector<Edge*>& MST) {}
