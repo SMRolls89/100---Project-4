@@ -93,6 +93,28 @@ void Map::Dijkstra(const string& from, const string& to,
                    vector<Vertex*>& shortestPath) {
 	//create an empty queue to store the vertices and distance 
 	//everything is infinity except the source 
+	vector<string> dist(V, INF); //set all the vertex distance to infinity 
+
+	unsigned int a = vertexId[from]; 
+	unsigned int b = vertextId[to]; 
+	typedef pair<Vertex*, dist> m; 
+	priority_queue<m, vector<m*>, /*comparator*/> pq; 
+
+	pq.push(make_pair(0, from));
+	dist[from] = 0; // sets the beginning index to 0 but this may be wrong 
+
+	while(!pq.empty()){
+		int u = pq.top().second; //take the distane of the top one 
+		//pq.pop(); 
+		Vertex* curr = vertices[a]; 
+		
+
+		//iterator? 
+		for( int i = curr->outEdges.begin(); i != curr->outEdges.end(); i++){
+			if (dist
+		}
+
+	}
 }
 
 /* TODO */
