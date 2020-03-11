@@ -4,6 +4,8 @@
 /* TODO */
 Map::Map() {}
 
+typdef pair<int,int> pp;
+
 /* Build the map graph from vertex and edge files */
 bool Map::buildMapFromFile(const string& vertexFileName,
                            const string& edgeFileName) {
@@ -92,6 +94,7 @@ bool Map::addEdge(const string& name1, const string& name2) {
 void Map::Dijkstra(const string& from, const string& to,
                    vector<Vertex*>& shortestPath) {
 	//create an empty queue to store the vertices and distance 
+<<<<<<< HEAD
 	//everything is infinity except the source 
 	vector<string> dist(V, INF); //set all the vertex distance to infinity 
 
@@ -115,10 +118,18 @@ void Map::Dijkstra(const string& from, const string& to,
 		}
 
 	}
+=======
+	//everything is infinity except the source
+	
+       priority_queue<pp, vector<pp>, comparePath> pq;	
+	
+>>>>>>> refs/remotes/origin/master
 }
 
 /* TODO */
-void Map::findMST(vector<Edge*>& MST) {}
+void Map::findMST(vector<Edge*>& MST) {
+	
+}
 
 /* TODO */
 void Map::crucialRoads(vector<Edge*>& roads) {}

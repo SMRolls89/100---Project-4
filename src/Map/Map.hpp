@@ -54,6 +54,8 @@ class Map {
 
     /* Destructor of Map graph */
     ~Map();
+
+    class DisjointSets(
 };
 
 #endif  // Map_HPP
