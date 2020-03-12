@@ -94,36 +94,88 @@ bool Map::addEdge(const string& name1, const string& name2) {
 void Map::Dijkstra(const string& from, const string& to,
                    vector<Vertex*>& shortestPath) {
 	//create an empty queue to store the vertices and distance 
-<<<<<<< HEAD
 	//everything is infinity except the source 
-	vector<string> dist(V, INF); //set all the vertex distance to infinity 
+	//vector<string> dist(V, INF); //set all the vertex distance to infinity 
 
+	int dist;
 	unsigned int a = vertexId[from]; 
 	unsigned int b = vertextId[to]; 
-	typedef pair<Vertex*, dist> m; 
-	priority_queue<m, vector<m*>, /*comparator*/> pq; 
 
-	pq.push(make_pair(0, from));
-	dist[from] = 0; // sets the beginning index to 0 but this may be wrong 
+	unsigned int temp = 0; 
+
+	typedef pair<Vertex*, dist> v_pair; 
+	priority_queue<v_pair, vector<v_pair*>, Vertex::comparePath> pq; 
+	Vertex * curr = vertices[a]; 
+	Vertex * dest = vertices[b]; 
+
+	pq.push(make_pair(curr, 0));
+	dist = 0; // sets the beginning index to 0 but this may be wrong 
 
 	while(!pq.empty()){
-		int u = pq.top().second; //take the distane of the top one 
-		//pq.pop(); 
+		dist = pq.top().second; //take the distance of the top one 
+		pq.pop();
+	       /*	
 		Vertex* curr = vertices[a]; 
 		
 
 		//iterator? 
-		for( int i = curr->outEdges.begin(); i != curr->outEdges.end(); i++){
-			if (dist
+		//looping through all the adjacent edges 
+		for( i = curr->outEdges.begin(); i != curr->outEdges.end(); ++i){
+			temp = i->weight + u; 
+			if (u > temp){
+				
+			}	
+		}
+		*/
+		curr->done = true; //setting to visited
+
+		//end the while loop if we are at the destination 
+		if (curr->name == dest->name){
+			break;
 		}
 
+		//string temp;
+	       int weight; 	
+		//the number of the edges 
+		int size = curr->outEdges.size(); 
+		//going through the individual edges 
+		for (int i = 0; i < (size-1); i++){
+			weight = curr->outEdges[i].weight; 
+			//first get the node from the outerEdge
+			if(curr->outEdges[i].source == curr){ //if the current vertex is the source pointer in OutEdge, 
+				//in terms of syntax at this point is it curr->outEdges[i].target? ->target?
+				Vertex * neighbor = curr->outEdges[i]->target; //create vertex node with target 
+			}
+			//check if the node was already visited
+			if(neightbor->done != true){
+				if(neighbor->inserted == true){
+					//if the neighbor node was already been inserted, 
+					if((dist+weight) < neightbor->dist){
+						//first current distance is smaller update pq
+						neighbor->dist = (dist+weight); 
+						pq.push(make_pair<neighbor, (dist+weight)>);
+					}
+				}else{
+					//push the node onto the priority_queue
+					pq.push(make_pair<neighbor, (dist+weight)>); 
+					//set inserted flag to true 
+					neighbor->inserted = true; 
+					neightbor->prev = vertexId[curr->name]; 
+				}
+
+			}
+		}
+			/*if (curr->outEdges[i].weight < curr->outEdges[i+1].weight){
+				temp = curr->outEdges[i].target->name; 
+			}
+			else{
+				temp = curr->outEdges[i+1].target->name; 
+			}*/
+		//Vertex * next = vertices[temp]; 
+		//pq.push(make_pair(next, 
 	}
-=======
-	//everything is infinity except the source
-	
-       priority_queue<pp, vector<pp>, comparePath> pq;	
-	
->>>>>>> refs/remotes/origin/master
+
+	//after we find the dest node, backtrack prev to get to the shortestPath
 }
 
 /* TODO */

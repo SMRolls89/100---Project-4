@@ -21,10 +21,12 @@ class Vertex {
     float dist; //cost of the best (least-cost) path discovered thus far
     int prev; //vertex number (index) of previous node on best path
     bool done; //if best is found, set to 1;
+    bool inserted; 
 
     //comparator for PQ in Dijkstra
     struct comparePath {
-	    bool operator() (const pair<int, int>&p1, const pair<int, int>&p2) {
+	    //our pairs are a pointer of Vertex and path cost
+	    bool operator() (const pair<Vertex*, int>&p1, const pair<Vertex*, int>&p2) {
 	    	return p1.second < p2.second;
 	    }
 
