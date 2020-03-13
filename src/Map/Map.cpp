@@ -101,13 +101,11 @@ bool Map::addEdge(const string& name1, const string& name2) {
     return true;
 }
 
-/* TODO */
+
 void Map::Dijkstra(const string& from, const string& to,
-                   vector<Vertex*>& shortestPath) {
-	cout << "starting dijkstra" << endl; 
+                   vector<Vertex*>& shortestPath) { 
 	//create an empty queue to store the vertices and distance 
-	//everything is infinity except the source 
-	//vector<string> dist(V, INF); //set all the vertex distance to infinity 
+	//everything is infinity except the source
 
 	int dist;
 
@@ -117,68 +115,49 @@ void Map::Dijkstra(const string& from, const string& to,
 		reset->inserted = false;
 		reset->dist = INF;
 	}
+
 	unsigned int a = vertexId[from]; 
 	unsigned int b = vertexId[to]; 
 
-	//unsigned int temp = 0; 
-
 	typedef pair<Vertex*, int> v_pair; 
+	//priority_queue to store the neighbors
 	priority_queue<v_pair, vector<v_pair>, Vertex::comparePath> pq; 
 	Vertex * curr = vertices[a]; 
 	Vertex * dest = vertices[b];
-	cout << "my destination is " << dest->name << endl;	
-	cout << "my starting point is " << curr->name << endl;
-	//pq.push(std::make_pair<Vertex*, int>(curr, 0));
-	
+
+	//push source in and set it to 0
 	v_pair p = make_pair(curr, 0);
 	pq.push(p);
-	//dist = 0; // sets the beginning index to 0 but this may be wrong 
 	curr->dist = 0;
 
 	while(!pq.empty()){
-		cout << "finding neighbors" << endl;
-		
 		dist = pq.top().second; //take the distance of the top one 
 		curr = pq.top().first;
 		pq.pop();
-		
-		
-		cout << "distance is " << dist << endl;
 
 		curr->done = 1; //setting to visited
-		
-		cout << "i've been visited" << curr->done << endl;
 
 		//end the while loop if we are at the destination 
 		if (curr->name == dest->name){
-			cout << "broke!" << endl;
 			break;
 		}
 
-		//string temp;
 	       int weight; 	
 		//the number of the edges 
 		int size = curr->outEdges.size(); 
-		cout << "whats my size?" << size << endl;
-		Vertex * neighbor; 
+		Vertex * neighbor;
+
 		//going through the individual edges 
 		for (int i = 0; i < size; i++){
-			cout << "neighbor for loop" << endl;
 			weight = curr->outEdges[i]->weight; 
-			cout << "my neighbor weight is " <<  weight << endl;
 			//first get the node from the outerEdge
 			if(curr->outEdges[i]->source == curr){ //if the current vertex is the source pointer in OutEdge, 
-				//in terms of syntax at this point is it curr->outEdges[i].target? ->target?
 				neighbor = curr->outEdges[i]->target; //create vertex node with target
-			       cout << "neighbor is target" << endl; 	
 			}else{
 				neighbor = curr->outEdges[i]->source;
-				cout << "neighbor is source" << endl;
 			}
-			cout << "my neighbor is" << neighbor->name << endl;
+
 			//check if the node was already visited
-			bool test = neighbor->done; 
-			cout << "done?" << test << endl;
 			if(neighbor->done == 0){
 				if(neighbor->inserted == 1){
 					//if the neighbor node was already been inserted, 
@@ -192,62 +171,35 @@ void Map::Dijkstra(const string& from, const string& to,
 					}
 				}else{
 					//push the node onto the priority_queue
-					cout << "did i push?" << endl;
 					pq.push(make_pair(neighbor, (dist + weight))); 
 					//set inserted flag to true 
 					neighbor->inserted = 1; 
 					neighbor->prev = vertexId[curr->name]; 
 					neighbor->dist = dist + weight;
-					int test = pq.size(); 
-					cout << "the pq size is now " << test << endl;
 				}
 
-			}
-		}
-			/*if (curr->outEdges[i].weight < curr->outEdges[i+1].weight){
-				temp = curr->outEdges[i].target->name; 
-			}
-			else{
-				temp = curr->outEdges[i+1].target->name; 
-			}*/
-		//Vertex * next = vertices[temp]; 
-		//pq.push(make_pair(next, 
-	}
+			}//if statement checking if the node has already been visited
+		}//for loop for edges end here 
+	}//while loop ends here 
 
 	//after we find the dest node, backtrack prev to get to the shortestPath
 	int previous;	
 	shortestPath.insert(shortestPath.begin(), curr);
-	//curr->dist = INF;
-	//while it is not the from node
-//	curr->done = 0;
-//	curr->inserted = 0;
 	while(curr != vertices[a]){
 		//indexs of the previous vertex
 		previous = curr->prev; 
 		//create vertex of the previous 
 		Vertex * path_node = vertices[previous]; 
-		cout << "BACKTRACK: " <<path_node->name << endl; 
 		//insert it to the front of the vector
 		shortestPath.insert(shortestPath.begin(), path_node);
-		//path_node->done = 0; 
-		//path_node->inserted = 0;
 		//set current vertex to be the previous vertex
 		curr = vertices[previous];
 	}
-	//curr = vertices[a]; 
-	//curr->done = 0; 
-	//curr->inserted = 0; 
-	cout << "set things to false?" << endl;
-	//stores the from node at the front of the shortestPath
-	//shortestPath.insert(shortestPath.begin(), curr); 
 
 	//emptying out the pq
 	while (!pq.empty()){
-		cout << "clearing" << endl;
 		Vertex * temp = pq.top().first;
 	       	pq.pop();	
-		temp->inserted = 0;
-		temp->dist = INF;
 	}	
 }
 
