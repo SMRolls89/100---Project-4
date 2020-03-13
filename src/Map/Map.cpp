@@ -1,7 +1,16 @@
 
 #include "Map.hpp"
+
+#include <queue>
+#include <utility>
+#include <vector>
+#include <iostream>
 //#include "Vertex.hpp"
 //#include "Edge.hpp"
+//
+#define INF 0x3f3f3f3f
+
+using namespace std;
 
 /* TODO */
 Map::Map() {}
@@ -95,44 +104,45 @@ bool Map::addEdge(const string& name1, const string& name2) {
 /* TODO */
 void Map::Dijkstra(const string& from, const string& to,
                    vector<Vertex*>& shortestPath) {
+	cout << "starting dijkstra" << endl; 
 	//create an empty queue to store the vertices and distance 
 	//everything is infinity except the source 
 	//vector<string> dist(V, INF); //set all the vertex distance to infinity 
 
 	int dist;
 	unsigned int a = vertexId[from]; 
-	unsigned int b = vertextId[to]; 
+	unsigned int b = vertexId[to]; 
 
-	unsigned int temp = 0; 
+	//unsigned int temp = 0; 
 
-	typedef pair<Vertex*, dist> v_pair; 
-	priority_queue<v_pair, vector<v_pair*>, Vertex::comparePath> pq; 
+	typedef pair<Vertex*, int> v_pair; 
+	priority_queue<v_pair, vector<v_pair>, Vertex::comparePath> pq; 
 	Vertex * curr = vertices[a]; 
-	Vertex * dest = vertices[b]; 
-
-	pq.push(make_pair(curr, 0));
-	dist = 0; // sets the beginning index to 0 but this may be wrong 
+	Vertex * dest = vertices[b];
+	cout << "my destination is " << dest->name << endl;	
+	cout << "my starting point is " << curr->name << endl;
+	//pq.push(std::make_pair<Vertex*, int>(curr, 0));
+	
+	v_pair p = make_pair(curr, 0);
+	pq.push(p);
+	//dist = 0; // sets the beginning index to 0 but this may be wrong 
 
 	while(!pq.empty()){
-		dist = pq.top().second; //take the distance of the top one 
-		pq.pop();
-	       /*	
-		Vertex* curr = vertices[a]; 
+		cout << "finding neighbors" << endl;
 		
+		dist = pq.top().second; //take the distance of the top one 
+		curr = pq.top().first;
+		pq.pop();
+		
+		cout << "distance is " << dist << endl;
 
-		//iterator? 
-		//looping through all the adjacent edges 
-		for( i = curr->outEdges.begin(); i != curr->outEdges.end(); ++i){
-			temp = i->weight + u; 
-			if (u > temp){
-				
-			}	
-		}
-		*/
 		curr->done = true; //setting to visited
+		
+		cout << "i've been visited" << curr->done << endl;
 
 		//end the while loop if we are at the destination 
 		if (curr->name == dest->name){
+			cout << "broke!" << endl;
 			break;
 		}
 
@@ -140,29 +150,46 @@ void Map::Dijkstra(const string& from, const string& to,
 	       int weight; 	
 		//the number of the edges 
 		int size = curr->outEdges.size(); 
+		cout << "whats my size?" << size << endl;
+		Vertex * neighbor; 
 		//going through the individual edges 
-		for (int i = 0; i < (size-1); i++){
-			weight = curr->outEdges[i].weight; 
+		for (int i = 0; i < size; i++){
+			cout << "neighbor for loop" << endl;
+			weight = curr->outEdges[i]->weight; 
+			cout << "my neighbor weight is " <<  weight << endl;
 			//first get the node from the outerEdge
-			if(curr->outEdges[i].source == curr){ //if the current vertex is the source pointer in OutEdge, 
+			if(curr->outEdges[i]->source == curr){ //if the current vertex is the source pointer in OutEdge, 
 				//in terms of syntax at this point is it curr->outEdges[i].target? ->target?
-				Vertex * neighbor = curr->outEdges[i]->target; //create vertex node with target 
+				neighbor = curr->outEdges[i]->target; //create vertex node with target
+			       cout << "neighbor is target" << endl; 	
+			}else{
+				neighbor = curr->outEdges[i]->source;
+				cout << "neighbor is source" << endl;
 			}
+			cout << "my neighbor is" << neighbor->name << endl;
 			//check if the node was already visited
-			if(neightbor->done != true){
+			bool test = neighbor->done; 
+			cout << "done?" << test << endl;
+			if(neighbor->done == false){
 				if(neighbor->inserted == true){
 					//if the neighbor node was already been inserted, 
-					if((dist+weight) < neightbor->dist){
+					if((dist+weight) < neighbor->dist){
 						//first current distance is smaller update pq
 						neighbor->dist = (dist+weight); 
-						pq.push(make_pair<neighbor, (dist+weight)>);
+						pq.push(make_pair(neighbor, (dist+weight)));
+						
+
 					}
 				}else{
 					//push the node onto the priority_queue
-					pq.push(make_pair<neighbor, (dist+weight)>); 
+					cout << "did i push?" << endl;
+					pq.push(make_pair(neighbor, (dist + weight))); 
 					//set inserted flag to true 
 					neighbor->inserted = true; 
-					neightbor->prev = vertexId[curr->name]; 
+					neighbor->prev = vertexId[curr->name]; 
+					neighbor->dist = dist;
+					int test = pq.size(); 
+					cout << "the pq size is now " << test << endl;
 				}
 
 			}
@@ -178,21 +205,38 @@ void Map::Dijkstra(const string& from, const string& to,
 	}
 
 	//after we find the dest node, backtrack prev to get to the shortestPath
-	int previous; 
-	shortestPath.insert(curr);
+	int previous;	
+	shortestPath.insert(shortestPath.begin(), curr);
+	//curr->dist = INF;
 	//while it is not the from node
-	while(curr->name != from){
+	curr->done = false;
+	curr->inserted = false;
+	while(curr != vertices[a]){
 		//indexs of the previous vertex
 		previous = curr->prev; 
 		//create vertex of the previous 
 		Vertex * path_node = vertices[previous]; 
+		cout << "BACKTRACK: " <<path_node->name << endl; 
 		//insert it to the front of the vector
 		shortestPath.insert(shortestPath.begin(), path_node);
+		path_node->done = false; 
+		path_node->inserted = false;
 		//set current vertex to be the previous vertex
 		curr = vertices[previous];
 	}
+	curr->done = false; 
+	curr->inserted = false; 
 	//stores the from node at the front of the shortestPath
-	shortestPath.insert(shortestPath.begin(), curr); 
+	//shortestPath.insert(shortestPath.begin(), curr); 
+
+	//emptying out the pq
+	while (!pq.empty()){
+		cout << "clearing" << endl;
+		Vertex * temp = pq.top().first;
+	       	pq.pop();	
+		temp->inserted = false;
+		temp->dist = INF;
+	}	
 }
 
 /* TODO */

@@ -20,16 +20,17 @@ class Vertex {
 
     float dist; //cost of the best (least-cost) path discovered thus far
     int prev; //vertex number (index) of previous node on best path
-    bool done; //if best is found, set to 1;
+    bool done = false; //if best is found, set to 1;
     //a flag to know when a Vertex has already been added to the pq in dijkstra
-    bool inserted; 
+    bool inserted = false; 
 
     //comparator for PQ in Dijkstra
     struct comparePath {
 	    //our pairs are a pointer of Vertex and path cost
 	    bool operator() (const pair<Vertex*, int>&p1, const pair<Vertex*, int>&p2) {
-	    	return p1.second < p2.second;
+	    	return p1.second > p2.second;
 	    }
+    };
 
     /* The constructor that creates a new vertex */
     Vertex(const string& name, float x, float y) : name(name), x(x), y(y) {}
