@@ -110,6 +110,13 @@ void Map::Dijkstra(const string& from, const string& to,
 	//vector<string> dist(V, INF); //set all the vertex distance to infinity 
 
 	int dist;
+
+	for (int i = 0; i < vertices.size(); i++){
+		Vertex * reset = vertices[i]; 
+		reset->done = false;
+		reset->inserted = false;
+		reset->dist = INF;
+	}
 	unsigned int a = vertexId[from]; 
 	unsigned int b = vertexId[to]; 
 
@@ -126,6 +133,7 @@ void Map::Dijkstra(const string& from, const string& to,
 	v_pair p = make_pair(curr, 0);
 	pq.push(p);
 	//dist = 0; // sets the beginning index to 0 but this may be wrong 
+	curr->dist = 0;
 
 	while(!pq.empty()){
 		cout << "finding neighbors" << endl;
@@ -134,9 +142,10 @@ void Map::Dijkstra(const string& from, const string& to,
 		curr = pq.top().first;
 		pq.pop();
 		
+		
 		cout << "distance is " << dist << endl;
 
-		curr->done = true; //setting to visited
+		curr->done = 1; //setting to visited
 		
 		cout << "i've been visited" << curr->done << endl;
 
@@ -170,13 +179,14 @@ void Map::Dijkstra(const string& from, const string& to,
 			//check if the node was already visited
 			bool test = neighbor->done; 
 			cout << "done?" << test << endl;
-			if(neighbor->done == false){
-				if(neighbor->inserted == true){
+			if(neighbor->done == 0){
+				if(neighbor->inserted == 1){
 					//if the neighbor node was already been inserted, 
 					if((dist+weight) < neighbor->dist){
 						//first current distance is smaller update pq
 						neighbor->dist = (dist+weight); 
 						pq.push(make_pair(neighbor, (dist+weight)));
+						neighbor->prev = vertexId[curr->name]; 
 						
 
 					}
@@ -185,9 +195,9 @@ void Map::Dijkstra(const string& from, const string& to,
 					cout << "did i push?" << endl;
 					pq.push(make_pair(neighbor, (dist + weight))); 
 					//set inserted flag to true 
-					neighbor->inserted = true; 
+					neighbor->inserted = 1; 
 					neighbor->prev = vertexId[curr->name]; 
-					neighbor->dist = dist;
+					neighbor->dist = dist + weight;
 					int test = pq.size(); 
 					cout << "the pq size is now " << test << endl;
 				}
@@ -209,8 +219,8 @@ void Map::Dijkstra(const string& from, const string& to,
 	shortestPath.insert(shortestPath.begin(), curr);
 	//curr->dist = INF;
 	//while it is not the from node
-	curr->done = false;
-	curr->inserted = false;
+//	curr->done = 0;
+//	curr->inserted = 0;
 	while(curr != vertices[a]){
 		//indexs of the previous vertex
 		previous = curr->prev; 
@@ -219,13 +229,15 @@ void Map::Dijkstra(const string& from, const string& to,
 		cout << "BACKTRACK: " <<path_node->name << endl; 
 		//insert it to the front of the vector
 		shortestPath.insert(shortestPath.begin(), path_node);
-		path_node->done = false; 
-		path_node->inserted = false;
+		//path_node->done = 0; 
+		//path_node->inserted = 0;
 		//set current vertex to be the previous vertex
 		curr = vertices[previous];
 	}
-	curr->done = false; 
-	curr->inserted = false; 
+	//curr = vertices[a]; 
+	//curr->done = 0; 
+	//curr->inserted = 0; 
+	cout << "set things to false?" << endl;
 	//stores the from node at the front of the shortestPath
 	//shortestPath.insert(shortestPath.begin(), curr); 
 
@@ -234,7 +246,7 @@ void Map::Dijkstra(const string& from, const string& to,
 		cout << "clearing" << endl;
 		Vertex * temp = pq.top().first;
 	       	pq.pop();	
-		temp->inserted = false;
+		temp->inserted = 0;
 		temp->dist = INF;
 	}	
 }
