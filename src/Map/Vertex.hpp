@@ -21,6 +21,7 @@ class Vertex {
     float dist; //cost of the best (least-cost) path discovered thus far
     int prev; //vertex number (index) of previous node on best path
     bool done; //if best is found, set to 1;
+    //a flag to know when a Vertex has already been added to the pq in dijkstra
     bool inserted; 
 
     //comparator for PQ in Dijkstra

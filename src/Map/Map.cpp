@@ -1,10 +1,12 @@
 
 #include "Map.hpp"
+//#include "Vertex.hpp"
+//#include "Edge.hpp"
 
 /* TODO */
 Map::Map() {}
 
-typdef pair<int,int> pp;
+//typdef pair<int,int> pp;
 
 /* Build the map graph from vertex and edge files */
 bool Map::buildMapFromFile(const string& vertexFileName,
@@ -176,6 +178,21 @@ void Map::Dijkstra(const string& from, const string& to,
 	}
 
 	//after we find the dest node, backtrack prev to get to the shortestPath
+	int previous; 
+	shortestPath.insert(curr);
+	//while it is not the from node
+	while(curr->name != from){
+		//indexs of the previous vertex
+		previous = curr->prev; 
+		//create vertex of the previous 
+		Vertex * path_node = vertices[previous]; 
+		//insert it to the front of the vector
+		shortestPath.insert(shortestPath.begin(), path_node);
+		//set current vertex to be the previous vertex
+		curr = vertices[previous];
+	}
+	//stores the from node at the front of the shortestPath
+	shortestPath.insert(shortestPath.begin(), curr); 
 }
 
 /* TODO */
